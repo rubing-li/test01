@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/js/websocket.js"></script>
+    <script src="/js/jquery-3.6.0.js"></script>
+    <script id="code">
+        var DEBUG_FLAG = true;
+        $(function(){
+            //启动websocket
+            createWebSocket();
+        });
+           //当有消息推送后，触发下面的事件
+        function onWsMessage(evt){
+            var jsonStr = evt.data;
+            writeToScreen(jsonStr);
+        }
+
+        function writeToScreen(message){
+            if(DEBUG_FLAG){
+                $("#debuggerInfo").val($("#debuggerInfo").val()+"\n"+message);
+            }
+        }
+
+        function sendMessageBySocket(){
+            var toUserId = $("#userId").val();
+            var msg = $("#msg").val();
+            var data = {"fromUserId":userId,"toUserId":toUserId,"msg":msg};
+            wsObj.send(JSON.stringify(data));
+        }
+
+    </script>
+</head>
+<body>
+    <textarea  id="debuggerInfo" style="width: 1024px;height: 300px;"></textarea>
+    <div>用户：<input type="text" id="userId"/></div>
+    <div>消息：<input type="text" id="msg" /></div>
+    <div><input type="button" value="发送" onclick="sendMessageBySocket()" /></div>
+</body>
+</html>
